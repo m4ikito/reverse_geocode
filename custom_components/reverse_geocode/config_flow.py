@@ -1,20 +1,32 @@
 from homeassistant import config_entries
-import voluptuous as vol
-from homeassistant.const import CONF_NAME
+from homeassistant.core import callback
+from homeassistant.const import CONF_NAME, CONF_DEVICE_TRACKER
 
-DOMAIN = "reverse_geocode"
+class ReverseGeocodeConfigFlow(config_entries.ConfigFlow, domain="reverse_geocode"):
+    """Handle a config flow for Reverse Geocode."""
 
-class ReverseGeocodeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    VERSION = 1
+
     async def async_step_user(self, user_input=None):
         if user_input is None:
-            return self.async_show_form(step_id="user", data_schema=vol.Schema({
-                vol.Required(CONF_NAME): str,  # Frage nach dem Namen
-            }))
+            return await self.async_show_form(step_id="user")
 
-        # Überprüfen, ob der Benutzername eingegeben wurde
-        if CONF_NAME not in user_input:
-            return self.async_show_form(step_id="user", data_schema=vol.Schema({
-                vol.Required(CONF_NAME): str,
-            }))
-
+        # Add your logic here to validate user_input if necessary
         return self.async_create_entry(title=user_input[CONF_NAME], data=user_input)
+
+    async def async_show_form(self, step_id: str, user_input=None):
+        return self.async_show_form(
+            step_id=step_id,
+            data_schema=self._get_data_schema(),
+        )
+
+    def _get_data_schema(self):
+        from homeassistant.helpers import config_entry_flow
+        from homeassistant.helpers import schema
+
+        return schema.Schema(
+            {
+                schema.string(CONF_NAME): str,
+                schema.string(CONF_DEVICE_TRACKER): str,
+            }
+        )
