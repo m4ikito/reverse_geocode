@@ -6,7 +6,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Setze die Integration mit der Konfiguration aus dem Konfigurationsfluss auf."""
     hass.data.setdefault(DOMAIN, {})
 
-    # Hier könntest du das Setup deiner Integration auf Basis der entry-Daten vornehmen
+    # Setup der Integration basierend auf der entry-Daten
     hass.data[DOMAIN][entry.entry_id] = entry.data
 
     return True
