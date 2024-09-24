@@ -1,3 +1,4 @@
+
 # Reverse Geocode Integration
 
 ![GitHub](https://img.shields.io/github/license/m4ikito/reverse_geocode)
@@ -22,6 +23,7 @@ Die **Reverse Geocode Integration** für Home Assistant ermöglicht es, die geog
      - platform: reverse_geocode
        name: "Location Sensor"
        entity_id: device_tracker.XYZ
+   ```
 
 ## Verwendung
 
@@ -29,10 +31,10 @@ Nach der Installation und Konfiguration kannst du den Sensor im Lovelace-Dashboa
 
 ## Entwickler
 
-  • GitHub: m4ikito
-	•	Repository: reverse_geocode
-	•	Issues: Bei Problemen oder Verbesserungsvorschlägen öffne ein Issue.
+- **GitHub**: [m4ikito](https://github.com/m4ikito)
+- **Repository**: [reverse_geocode](https://github.com/m4ikito/reverse_geocode)
+- **Issues**: Bei Problemen oder Verbesserungsvorschlägen öffne ein [Issue](https://github.com/m4ikito/reverse_geocode/issues).
 
 ## Lizenz
 
-Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe die LICENSE Datei für weitere Details.
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe die [LICENSE](LICENSE) Datei für weitere Details.
