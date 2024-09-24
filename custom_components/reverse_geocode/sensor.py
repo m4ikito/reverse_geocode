@@ -1,33 +1,34 @@
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers import config_validation as cv
-from homeassistant.const import CONF_ENTITY_ID
+from homeassistant.const import CONF_DEVICE_TRACKER
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
-    device_tracker_entity_id = config.get(CONF_ENTITY_ID)
-
-    # Überprüfen, ob der device_tracker vorhanden ist
-    device_tracker = hass.states.get(device_tracker_entity_id)
+    """Set up the sensor platform."""
+    device_tracker = config.get(CONF_DEVICE_TRACKER)
+    
     if device_tracker is None:
-        _LOGGER.error(f"Device tracker '{device_tracker_entity_id}' not found.")
         return
 
-    # Werte abrufen
-    latitude = device_tracker.attributes.get("latitude")
-    longitude = device_tracker.attributes.get("longitude")
-
-    # Hier fügen wir Sensoren hinzu
-    async_add_entities([ReverseGeocodeSensor(latitude, longitude)], True)
+    # Assuming you have a function that gets device tracker state
+    async_add_entities([ReverseGeocodeSensor(device_tracker)])
 
 class ReverseGeocodeSensor(Entity):
-    def __init__(self, latitude, longitude):
-        self._latitude = latitude
-        self._longitude = longitude
-        self._attr_name = "Reverse Geocode Sensor"  # Beispielname
+    """Representation of a Reverse Geocode Sensor."""
 
-    @property
-    def state(self):
-        return f"{self._latitude}, {self._longitude}"
+    def __init__(self, device_tracker):
+        self._device_tracker = device_tracker
+        self._state = None
 
     @property
     def name(self):
-        return self._attr_name
+        return "Reverse Geocode Sensor"
+
+    @property
+    def state(self):
+        return self._state
+
+    async def async_update(self):
+        """Update the sensor state."""
+        # Update logic to get new state from device_tracker
+        # For example:
+        # self._state = await self.hass.async_add_executor_job(get_latitude_longitude, self._device_tracker)
