@@ -1,34 +1,35 @@
-from homeassistant import config_entries
-from homeassistant.core import callback
+from homeassistant.helpers.entity import Entity
+from homeassistant.helpers import config_validation as cv
 from homeassistant.const import CONF_NAME
 
-# Neue Konstante für den Device Tracker definieren
+# Neue Konstante für den Device Tracker importieren
 CONF_DEVICE_TRACKER = "device_tracker"
 
-class ReverseGeocodeConfigFlow(config_entries.ConfigFlow, domain="reverse_geocode"):
-    """Handle a config flow for Reverse Geocode."""
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+    """Set up the sensor platform."""
+    device_tracker = config.get(CONF_DEVICE_TRACKER)
+    
+    if device_tracker is None:
+        return
 
-    VERSION = 1
+    async_add_entities([ReverseGeocodeSensor(device_tracker)])
 
-    async def async_step_user(self, user_input=None):
-        if user_input is None:
-            return await self.async_show_form(step_id="user")
+class ReverseGeocodeSensor(Entity):
+    """Representation of a Reverse Geocode Sensor."""
 
-        return self.async_create_entry(title=user_input[CONF_NAME], data=user_input)
+    def __init__(self, device_tracker):
+        self._device_tracker = device_tracker
+        self._state = None
 
-    async def async_show_form(self, step_id: str, user_input=None):
-        return self.async_show_form(
-            step_id=step_id,
-            data_schema=self._get_data_schema(),
-        )
+    @property
+    def name(self):
+        return "Reverse Geocode Sensor"
 
-    def _get_data_schema(self):
-        from homeassistant.helpers import config_entry_flow
-        from homeassistant.helpers import schema
+    @property
+    def state(self):
+        return self._state
 
-        return schema.Schema(
-            {
-                schema.string(CONF_NAME): str,
-                schema.string(CONF_DEVICE_TRACKER): str,
-            }
-        )
+    async def async_update(self):
+        """Update the sensor state."""
+        # Update logic to get new state from device_tracker
+        # self._state = await self.hass.async_add_executor_job(get_latitude_longitude, self._device_tracker)
