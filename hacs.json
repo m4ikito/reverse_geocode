@@ -1,0 +1,9 @@
+{
+  "name": "Reverse Geocode",
+  "content_in_root": false,
+  "filename": "custom_components/reverse_geocode",
+  "domains": ["sensor"],
+  "country": "de",
+  "homeassistant": "2023.5.0",
+  "render_readme": true
+}
