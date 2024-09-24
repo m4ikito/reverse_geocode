@@ -1,18 +1,15 @@
 import logging
 from homeassistant import config_entries
-import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.const import CONF_NAME, CONF_SCAN_INTERVAL
-from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-class ReverseGeocodeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class ReverseGeocodeConfigFlow(config_entries.ConfigFlow, domain='reverse_geocode'):
     async def async_step_user(self, user_input=None):
         if user_input is None:
             return await self.async_show_form(step_id="user")
 
-        # Hier die Benutzereingaben verarbeiten
         return self.async_create_entry(title=user_input[CONF_NAME], data=user_input)
 
     async def async_show_form(self, step_id):
