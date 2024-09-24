@@ -6,5 +6,6 @@
   "documentation": "https://github.com/m4ikito/reverse_geocode",
   "requirements": [],
   "dependencies": [],
-  "codeowners": ["@m4ikito"]
+  "codeowners": ["@m4ikito"],
+  "icon": "/custom_components/reverse_geocode/icons/reverse_geocode_icon.png"
 }
