@@ -4,6 +4,6 @@
   "filename": "custom_components/reverse_geocode",
   "domains": ["sensor"],
   "country": "de",
-  "homeassistant": "2023.5.0",
+  "homeassistant": "2024.9.2",
   "render_readme": true
 }
