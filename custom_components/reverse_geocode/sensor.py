@@ -1,59 +1,33 @@
-import logging
-import requests
-import homeassistant.helpers.config_validation as cv
-import voluptuous as vol
-from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.const import CONF_NAME, CONF_ENTITY_ID
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers import config_validation as cv
+from homeassistant.const import CONF_ENTITY_ID
 
-_LOGGER = logging.getLogger(__name__)
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+    device_tracker_entity_id = config.get(CONF_ENTITY_ID)
 
-DEFAULT_NAME = "Reverse Geocode"
+    # Überprüfen, ob der device_tracker vorhanden ist
+    device_tracker = hass.states.get(device_tracker_entity_id)
+    if device_tracker is None:
+        _LOGGER.error(f"Device tracker '{device_tracker_entity_id}' not found.")
+        return
 
-# Füge die Option für den Device Tracker hinzu
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_ENTITY_ID): cv.entity_id,
-    vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string
-})
-
-def setup_platform(hass, config, add_entities, discovery_info=None):
-    name = config.get(CONF_NAME)
-    entity_id = config.get(CONF_ENTITY_ID)  # Hol dir den Device Tracker aus der Konfiguration
-    
-    device_tracker = hass.states.get(entity_id)
+    # Werte abrufen
     latitude = device_tracker.attributes.get("latitude")
     longitude = device_tracker.attributes.get("longitude")
 
-    if latitude and longitude:
-        add_entities([ReverseGeocodeSensor(name, latitude, longitude)])
+    # Hier fügen wir Sensoren hinzu
+    async_add_entities([ReverseGeocodeSensor(latitude, longitude)], True)
 
 class ReverseGeocodeSensor(Entity):
-    def __init__(self, name, lat, lon):
-        self._name = name
-        self._state = None
-        self._latitude = lat
-        self._longitude = lon
-    
-    @property
-    def name(self):
-        return self._name
+    def __init__(self, latitude, longitude):
+        self._latitude = latitude
+        self._longitude = longitude
+        self._attr_name = "Reverse Geocode Sensor"  # Beispielname
 
     @property
     def state(self):
-        return self._state
+        return f"{self._latitude}, {self._longitude}"
 
-    def update(self):
-        self._state = self.reverse_geocode(self._latitude, self._longitude)
-
-    def reverse_geocode(self, lat, lon):
-        url = f"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}&zoom=18&addressdetails=1"
-        try:
-            response = requests.get(url)
-            data = response.json()
-            if 'error' not in data:
-                return data.get("display_name", "Unknown location")
-            else:
-                return "Location not found"
-        except Exception as e:
-            _LOGGER.error(f"Error fetching data from Nominatim: {e}")
-            return "Error"
+    @property
+    def name(self):
+        return self._attr_name
