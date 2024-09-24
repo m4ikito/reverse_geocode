@@ -1,0 +1,10 @@
+{
+  "domain": "reverse_geocode",
+  "name": "Reverse Geocode",
+  "version": "1.0",
+  "documentation": "https://github.com/m4ikito/reverse_geocode",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": [],
+  "integration_type": "sensor"
+}
