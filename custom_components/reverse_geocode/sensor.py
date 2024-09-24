@@ -1,33 +1,34 @@
+from homeassistant import config_entries
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers import config_validation as cv
-from homeassistant.const import CONF_ENTITY_ID
+from .const import DOMAIN
+from homeassistant.const import CONF_NAME, CONF_SCAN_INTERVAL
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
-    device_tracker_entity_id = config.get(CONF_ENTITY_ID)
+    # Hier die Konfiguration des Sensors aufbauen
+    sensor_name = config[CONF_NAME]
+    device_tracker = config["device_tracker"]
+    update_interval = config.get(CONF_SCAN_INTERVAL, 60)
 
-    # Überprüfen, ob der device_tracker vorhanden ist
-    device_tracker = hass.states.get(device_tracker_entity_id)
-    if device_tracker is None:
-        _LOGGER.error(f"Device tracker '{device_tracker_entity_id}' not found.")
-        return
-
-    # Werte abrufen
-    latitude = device_tracker.attributes.get("latitude")
-    longitude = device_tracker.attributes.get("longitude")
-
-    # Hier fügen wir Sensoren hinzu
-    async_add_entities([ReverseGeocodeSensor(latitude, longitude)], True)
+    async_add_entities([ReverseGeocodeSensor(sensor_name, device_tracker, update_interval)])
 
 class ReverseGeocodeSensor(Entity):
-    def __init__(self, latitude, longitude):
-        self._latitude = latitude
-        self._longitude = longitude
-        self._attr_name = "Reverse Geocode Sensor"  # Beispielname
-
-    @property
-    def state(self):
-        return f"{self._latitude}, {self._longitude}"
+    def __init__(self, name, device_tracker, update_interval):
+        self._name = name
+        self._device_tracker = device_tracker
+        self._update_interval = update_interval
+        self._state = None
 
     @property
     def name(self):
-        return self._attr_name
+        return self._name
+
+    @property
+    def state(self):
+        return self._state
+
+    async def async_update(self):
+        # Hier die Logik für das Update des Sensors implementieren
+        # Zum Beispiel:
+        # - Die Position des device_trackers abrufen
+        # - Die Geodaten verarbeiten und den Zustand des Sensors aktualisieren
+        pass
