@@ -2,9 +2,9 @@
   "domain": "reverse_geocode",
   "name": "Reverse Geocode",
   "version": "1.0.1",
+  "config_flow": true, 
   "documentation": "https://github.com/m4ikito/reverse_geocode",
   "requirements": [],
   "dependencies": [],
-  "codeowners": [],
-  "integration_type": "sensor"
+  "codeowners": ["@m4ikito"]
 }
