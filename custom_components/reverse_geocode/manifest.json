@@ -1,7 +1,7 @@
 {
   "domain": "reverse_geocode",
   "name": "Reverse Geocode",
-  "version": "1.0",
+  "version": "1.0.1",
   "documentation": "https://github.com/m4ikito/reverse_geocode",
   "requirements": [],
   "dependencies": [],
