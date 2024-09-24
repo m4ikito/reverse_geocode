@@ -2,7 +2,7 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
 
-from .const import DOMAIN  # Importiere deine Domain-Konstante
+from .const import DOMAIN  # Importiere die Domain-Konstante
 
 @callback
 def configured_instances(hass):
@@ -30,7 +30,7 @@ class ReverseGeocodeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     data=user_input,
                 )
 
-        # Standard-Daten für die Eingabemaske
+        # Schema für die Eingabemaske
         data_schema = vol.Schema({
             vol.Required("name"): str,
             vol.Required("device_tracker"): str,
